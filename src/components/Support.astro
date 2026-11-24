@@ -1,0 +1,63 @@
+---
+// #suprovid (concept 8.1 №5): service plate 7/5 with its own number, training and clinical support, financing band.
+import FutureLink from "./FutureLink.astro";
+import { phones, addresses, NOTE } from "../data/site";
+---
+<section id="suprovid" class="support section" data-rec="R-011" aria-labelledby="support-title">
+  <div class="container">
+    <div class="section__head">
+      <h2 id="support-title" class="h2">Після покупки Harwind поруч</h2>
+    </div>
+    <div class="support__grid">
+      <article class="plate" aria-labelledby="service-title">
+        <h3 id="service-title" class="h3">Сервісний центр</h3>
+        <a class="plate__phone num" href={`tel:${phones.service.tel}`}>{phones.service.display}</a>
+        <p class="plate__text">Гарантійне й платне обслуговування обладнання по всій Україні. Підмінний фонд.</p>
+        <p class="plate__addr small"><a class="link" href={addresses.service.map} rel="noopener">{addresses.service.line}, {addresses.service.city}</a></p>
+        <p class="plate__more"><FutureLink note={NOTE}>Сервіс і сертифікати</FutureLink></p>
+      </article>
+
+      <article class="train" aria-labelledby="train-title">
+        <h3 id="train-title" class="h3">Навчання і клінічний супровід</h3>
+        <p>Навчаємо персонал, консультуємо й супроводжуємо після встановлення. Клінічні спеціалісти Harwind працюють за напрямами:</p>
+        <ul class="train__list">
+          <li>Ультразвукова діагностика</li>
+          <li>Ендоскопія</li>
+          <li>Наркозно-дихальне обладнання й реанімація</li>
+        </ul>
+        <p><FutureLink note={NOTE}>Навчання</FutureLink></p>
+      </article>
+    </div>
+
+    <div class="finance">
+      <h3 class="finance__title">Фінансування</h3>
+      <p>Кредитування 5-7-9 і апгрейд Trade-In.</p>
+      <p class="finance__more"><FutureLink note={NOTE}>Умови фінансування</FutureLink></p>
+    </div>
+  </div>
+</section>
+
+<style>
+  .support__grid { display: grid; gap: var(--space-5); }
+  .plate { display: grid; gap: var(--space-4); align-content: start; padding: var(--space-6) var(--space-5); background: var(--color-well); border-radius: var(--radius); }
+  .plate__phone { justify-self: start; font-family: var(--font-display); font-weight: var(--weight-display); font-size: clamp(2.75rem, 1.5rem + 5vw, 5.5rem); line-height: 0.95; letter-spacing: -0.01em; color: var(--color-field); text-decoration: none; transition: color var(--dur-micro) var(--ease-out); }
+  .plate__phone:hover { color: var(--color-accent); }
+  .plate__phone:active { color: var(--color-accent-hover); }
+  .plate__text { max-width: 44ch; }
+  .plate__addr a { display: inline-flex; align-items: center; min-height: var(--tap); }
+  .plate__more, .train p:last-child, .finance__more { font-weight: var(--weight-semibold); }
+  .train { display: grid; gap: var(--space-4); align-content: start; padding-block: var(--space-5); }
+  .train p:first-of-type { color: var(--color-muted); max-width: 52ch; }
+  .train__list { display: grid; }
+  .train__list li { padding-block: var(--space-3); border-bottom: var(--rule) solid var(--color-rule); font-weight: var(--weight-semibold); }
+  .train__list li:first-child { border-top: var(--rule) solid var(--color-rule); }
+  .finance { display: grid; gap: var(--space-2) var(--space-5); align-items: center; margin-top: var(--space-5); padding: var(--space-5); border: var(--rule) solid var(--color-field); border-radius: var(--radius); }
+  .finance__title { font-family: var(--font-display); font-weight: var(--weight-display); font-size: var(--text-lg); line-height: 1.1; }
+
+  @media (min-width: 1024px) {
+    .support__grid { grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gutter); }
+    .plate { grid-column: 1 / span 7; padding: var(--space-7) var(--space-6); }
+    .train { grid-column: 9 / span 4; padding-block: var(--space-2); }
+    .finance { grid-template-columns: auto minmax(0, 1fr) auto; }
+  }
+</style>

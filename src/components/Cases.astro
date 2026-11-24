@@ -1,0 +1,36 @@
+---
+// #keisy (concept 8.1 №7): dated register of 3 deliveries, no photos. Each row is a future case page.
+import FutureLink from "./FutureLink.astro";
+import { cases, NOTE } from "../data/site";
+---
+<section id="keisy" class="cases section" data-rec="R-011" aria-labelledby="cases-title">
+  <div class="container">
+    <div class="section__head">
+      <h2 id="cases-title" class="h2">Поставки для Добробуту, Superhumans і МОЗ</h2>
+    </div>
+    <ol class="cases__list">
+      {cases.map((c) => (
+        <li class="case">
+          <time class="case__date num" datetime={c.date}>{c.dateText}</time>
+          <h3 class="case__title"><FutureLink note={NOTE} class="case__link">{c.title}</FutureLink></h3>
+          <p class="case__partner muted">{c.partner}</p>
+        </li>
+      ))}
+    </ol>
+  </div>
+</section>
+
+<style>
+  .cases__list { border-top: var(--rule-strong) solid var(--color-field); }
+  .case { position: relative; display: grid; gap: var(--space-2); padding-block: var(--space-5); border-bottom: var(--rule) solid var(--color-field); }
+  .case__date { font-size: var(--text-xs); color: var(--color-muted); }
+  .case__title { font-family: var(--font-display); font-weight: var(--weight-display); font-size: clamp(1.625rem, 1.2rem + 1vw, 2.125rem); line-height: 1.05; letter-spacing: -0.01em; }
+  .case__title :global(.case__link) { text-decoration: none; }
+  .case__title :global(.case__link:hover) { color: var(--color-field); }
+  @media (min-width: 1024px) {
+    .case { grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gutter); align-items: baseline; padding-block: var(--space-6); }
+    .case__date { grid-column: 1 / span 2; font-size: var(--text-base); }
+    .case__title { grid-column: 3 / span 7; }
+    .case__partner { grid-column: 10 / span 3; text-align: right; }
+  }
+</style>

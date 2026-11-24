@@ -1,0 +1,45 @@
+---
+// #vyrobnyky (concept 8.1 №6): typographic register of the 27 brands from W-F002 (self-declared status).
+import FutureLink from "./FutureLink.astro";
+import { brands, brandsLead, NOTE } from "../data/site";
+---
+<section id="vyrobnyky" class="makers section" data-rec="R-011" aria-labelledby="makers-title">
+  <div class="container makers__grid">
+    <div class="makers__head">
+      <h2 id="makers-title" class="h2">27 виробників, яких Harwind представляє за заявою компанії</h2>
+      <p class="makers__more"><FutureLink note={NOTE}>Сертифікати</FutureLink></p>
+    </div>
+    <div class="makers__list">
+      <ul class="makers__lead">
+        {brandsLead.map((b) => <li>{b}</li>)}
+      </ul>
+      <ul class="makers__rest">
+        {brands.map((b) => <li>{b}</li>)}
+      </ul>
+    </div>
+  </div>
+</section>
+
+<style>
+  .makers { border-top: var(--rule) solid var(--color-rule); }
+  .makers.section { padding-block: var(--space-8); }
+  .makers__grid { display: grid; gap: var(--space-6); }
+  .makers__head { display: grid; gap: var(--space-4); align-content: start; }
+  .makers__head p.muted { max-width: 36ch; }
+  .makers__more { font-weight: var(--weight-semibold); }
+  .makers__list { display: grid; gap: var(--space-5); }
+  .makers__lead { display: flex; flex-wrap: wrap; gap: var(--space-2) var(--space-6); font-family: var(--font-display); font-weight: var(--weight-display); font-size: var(--text-2xl); line-height: 1; color: var(--color-field); }
+  .makers__rest { columns: 2; column-gap: var(--gutter); font-family: var(--font-display); font-weight: var(--weight-semibold); font-size: var(--text-md); line-height: 1.2; }
+  .makers__rest li { break-inside: avoid; padding-block: var(--space-2); border-bottom: var(--rule) solid var(--color-rule); }
+
+  @media (min-width: 768px) {
+    .makers__rest { columns: 3; }
+  }
+  @media (min-width: 1024px) {
+    .makers__grid { grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gutter); }
+    .makers__head { grid-column: 1 / -1; grid-template-columns: minmax(0, 1fr) auto; align-items: end; column-gap: var(--gutter); }
+    .makers__list { grid-column: 1 / -1; }
+    .makers__rest { columns: 4; }
+    .makers__lead { font-size: var(--text-2xl); }
+  }
+</style>

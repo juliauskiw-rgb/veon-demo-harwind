@@ -1,0 +1,66 @@
+---
+import Icon from "./Icon.astro";
+import { phones, telegram } from "../data/site";
+
+const h1 = "Медичне обладнання, яке лікар випробує до покупки";
+const words = h1.split(" ");
+---
+<section id="top" class="hero" data-rec="R-002,R-003,G-R001,M-R005" aria-labelledby="hero-title">
+  <div class="container hero__in">
+    <h1 id="hero-title" class="display hero__title" data-land>
+      {words.map((w, i) => <Fragment><span class="hero__w">{w}</span>{i < words.length - 1 ? " " : ""}</Fragment>)}
+    </h1>
+    <p class="lede hero__lede">Постачаємо обладнання для клінік і лікарень, даємо апробацію 10–14 днів безкоштовно, навчаємо персонал і обслуговуємо по всій Україні.</p>
+    <div class="hero__actions">
+      <a class="btn btn--primary" href={`tel:${phones.sales.tel}`}><Icon name="phone" />Подзвонити у відділ продажу</a>
+      <a class="btn btn--secondary" href={telegram} rel="noopener"><Icon name="telegram" />Написати в Telegram</a>
+    </div>
+    <a class="hero__more link" href="#napryamy">Обрати напрям обладнання<Icon name="arrow-down" class="hero__more-icon" /></a>
+  </div>
+</section>
+
+<script is:inline>
+  // Effect 1 (concept 8.7): the H1 lands line by line. Text is visible from the first frame (no opacity change).
+  (function () {
+    var h = document.querySelector("[data-land]");
+    if (!h || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    var top = null, line = -1;
+    h.querySelectorAll(".hero__w").forEach(function (w) {
+      if (w.offsetTop !== top) { top = w.offsetTop; line += 1; }
+      w.style.setProperty("--d", line * 60 + "ms");
+    });
+    h.classList.add("is-landing");
+  })();
+</script>
+
+<style>
+  .hero { padding-block: var(--space-6) var(--space-7); }
+  .hero__in { display: grid; gap: var(--space-5); justify-items: start; }
+  .hero__title { font-size: var(--text-display); line-height: var(--leading-display); max-width: 15ch; }
+  .hero__w { display: inline-block; }
+  :global(.js) .hero__title.is-landing .hero__w { animation: hero-land var(--dur-land) var(--ease-out) both; animation-delay: var(--d, 0ms); }
+  @keyframes hero-land { from { transform: translateY(var(--land, 12px)); } to { transform: translateY(0); } }
+  .hero__lede { color: var(--color-muted); }
+  .hero__actions { display: flex; flex-wrap: wrap; gap: var(--space-3); margin-top: var(--space-2); }
+  .hero__more { display: inline-flex; align-items: center; gap: var(--space-2); min-height: var(--tap); font-weight: var(--weight-semibold); }
+  .hero__more :global(.hero__more-icon) { width: 20px; height: 20px; }
+
+  @media (max-width: 767px) {
+    .hero { padding-block: var(--space-5) var(--space-6); --land: 8px; }
+    .hero__in { gap: var(--space-4); }
+    .hero__title { font-size: var(--text-display); max-width: none; }
+    .hero__lede { font-size: var(--text-base); }
+    .hero__actions { width: 100%; flex-direction: column; }
+    .hero__actions .btn { width: 100%; padding-inline: var(--space-3); }
+  }
+  @media (max-width: 359px) {
+    .hero__actions .btn :global(svg) { display: none; }
+  }
+  @media (min-width: 1024px) {
+    .hero { padding-block: var(--space-7) var(--space-7); }
+    .hero__title { max-width: calc(var(--container) * 0.75); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    :global(.js) .hero__title.is-landing .hero__w { animation: none; }
+  }
+</style>

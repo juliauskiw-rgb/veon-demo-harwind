@@ -1,0 +1,121 @@
+---
+// #kontakty (concept 8.1 №9): task switch with the department number (aria-pressed). Without JS every task is listed.
+import Icon from "./Icon.astro";
+import { routes, phones, email, telegram, hours, addresses } from "../data/site";
+---
+<section id="kontakty" class="contacts section" data-rec="R-010,G-R003" aria-labelledby="contacts-title">
+  <div class="container">
+    <div class="section__head">
+      <h2 id="contacts-title" class="h2">Куди звернутися</h2>
+    </div>
+    <div class="contacts__grid">
+      <div class="routes" data-routes>
+        <div class="routes__switch" role="group" aria-label="Оберіть задачу">
+          {routes.map((r, i) => (
+            <button type="button" class="routes__btn" data-route-btn={r.key} aria-pressed={i === 0 ? "true" : "false"} aria-controls={`route-${r.key}`}>{r.task}</button>
+          ))}
+        </div>
+        <div class="routes__panels">
+          {routes.map((r, i) => (
+            <article class:list={["route", { "is-active": i === 0 }]} id={`route-${r.key}`} data-route={r.key} aria-labelledby={`route-${r.key}-t`}>
+              <h3 class="route__task" id={`route-${r.key}-t`}>{r.task}</h3>
+              <p class="route__dept small">{r.phone.label}</p>
+              <a class="route__phone num" href={`tel:${r.phone.tel}`}>{r.phone.display}</a>
+              <p class="route__text muted">{r.text}</p>
+              <a class="route__mail link" href={`mailto:${email}?subject=${encodeURIComponent(r.subject)}`}><Icon name="mail" />Написати листа</a>
+            </article>
+          ))}
+        </div>
+      </div>
+
+      <div class="desk">
+        <dl class="desk__list">
+          <div><dt class="small muted">{phones.office.label}</dt><dd><a class="desk__strong num" href={`tel:${phones.office.tel}`}>{phones.office.display}</a></dd></div>
+          <div><dt class="small muted">Месенджер</dt><dd><a class="link desk__line" href={telegram} rel="noopener"><Icon name="telegram" />Telegram-бот Harwind</a></dd></div>
+          <div><dt class="small muted">E-mail</dt><dd><a class="link desk__line" href={`mailto:${email}`}>{email}</a></dd></div>
+          <div><dt class="small muted">Графік роботи</dt><dd class="num">{hours}</dd></div>
+          <div><dt class="small muted">{addresses.office.label}, {addresses.office.city}</dt><dd><a class="link desk__line" href={addresses.office.map} rel="noopener"><Icon name="pin" />{addresses.office.line}</a></dd></div>
+          <div><dt class="small muted">{addresses.service.label}, {addresses.service.city}</dt><dd><a class="link desk__line" href={addresses.service.map} rel="noopener"><Icon name="pin" />{addresses.service.line}</a></dd></div>
+        </dl>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  // Effect 4 (concept 8.7): the old number leaves upwards, the new one enters from below (220 ms, transform + opacity).
+  const root = document.querySelector<HTMLElement>("[data-routes]");
+  if (root) {
+    const buttons = [...root.querySelectorAll<HTMLButtonElement>("[data-route-btn]")];
+    const panels = [...root.querySelectorAll<HTMLElement>("[data-route]")];
+    const select = (key: string) => {
+      buttons.forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.routeBtn === key)));
+      panels.forEach((p) => {
+        const on = p.dataset.route === key;
+        if (p.classList.contains("is-active") && !on) {
+          p.classList.remove("is-active");
+          p.classList.add("is-leaving");
+          window.setTimeout(() => p.classList.remove("is-leaving"), 240);
+        } else if (on) {
+          p.classList.remove("is-leaving");
+          p.classList.add("is-active");
+        }
+      });
+    };
+    buttons.forEach((b) => b.addEventListener("click", () => select(b.dataset.routeBtn ?? "buy")));
+  }
+</script>
+
+<style>
+  .contacts__grid { display: grid; gap: var(--space-7); }
+  .routes { display: grid; gap: var(--space-5); align-content: start; }
+  .routes__switch { display: none; flex-wrap: wrap; gap: var(--space-2); }
+  :global(.js) .routes__switch { display: flex; }
+  .routes__btn {
+    min-height: var(--tap); padding: var(--space-0) var(--space-4);
+    font: inherit; font-weight: var(--weight-semibold); white-space: nowrap; color: var(--color-text);
+    background: transparent; border: var(--rule) solid var(--color-edge); border-radius: var(--radius); cursor: pointer;
+    transition: background-color var(--dur-micro) var(--ease-out), border-color var(--dur-micro) var(--ease-out), color var(--dur-micro) var(--ease-out);
+  }
+  .routes__btn:hover { border-color: var(--color-text); background: var(--color-surface); }
+  .routes__btn:active { background: var(--color-well); }
+  .routes__btn[aria-pressed="true"] { background: var(--color-field); border-color: var(--color-field); color: var(--color-on-field); }
+  .routes__btn:disabled { cursor: not-allowed; opacity: 0.6; }
+
+  .routes__panels { display: grid; gap: var(--space-5); }
+  .route { display: grid; gap: var(--space-2); align-content: start; justify-items: start; padding-top: var(--space-4); border-top: var(--rule-strong) solid var(--color-field); }
+  .route__task { font-size: var(--text-md); font-weight: var(--weight-semibold); line-height: 1.3; }
+  .route__dept { color: var(--color-muted); }
+  .route__phone { font-family: var(--font-display); font-weight: var(--weight-display); font-size: clamp(3rem, 1.6rem + 6vw, 6.5rem); line-height: 0.95; letter-spacing: -0.01em; color: var(--color-text); text-decoration: none; transition: color var(--dur-micro) var(--ease-out); }
+  .route__phone:hover { color: var(--color-accent); }
+  .route__phone:active { color: var(--color-accent-hover); }
+  .route__text { max-width: 46ch; }
+  .route__mail, .desk__line { display: inline-flex; align-items: center; gap: var(--space-2); min-height: var(--tap); overflow-wrap: break-word; min-width: 0; }
+  .route__mail :global(svg), .desk__line :global(svg) { width: 20px; height: 20px; flex: none; }
+
+  .desk__list { display: grid; gap: var(--space-4); margin: var(--space-0); }
+  .desk__list div { display: grid; gap: var(--space-1); padding-bottom: var(--space-4); border-bottom: var(--rule) solid var(--color-rule); }
+  .desk__list dd { margin: var(--space-0); }
+  .desk__strong { font-family: var(--font-display); font-weight: var(--weight-display); font-size: var(--text-xl); line-height: 1; text-decoration: none; transition: color var(--dur-micro) var(--ease-out); }
+  .desk__strong:hover { color: var(--color-accent); }
+  .desk__strong:active { color: var(--color-accent-hover); }
+
+  @media (min-width: 1024px) {
+    .contacts__grid { grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gutter); }
+    .routes { grid-column: 1 / span 7; }
+    .desk { grid-column: 9 / span 4; }
+  }
+</style>
+
+<style is:global>
+  /* With JS: panels share one cell, only the chosen one is shown. */
+  .js .routes__panels { gap: var(--space-0); }
+  .js .route { grid-area: 1 / 1; opacity: 0; visibility: hidden; transform: translateY(8px); transition: opacity var(--dur-short) var(--ease-out), transform var(--dur-short) var(--ease-out), visibility 0s linear var(--dur-short); }
+  .js .route.is-active { opacity: 1; visibility: visible; transform: translateY(0); transition: opacity var(--dur-short) var(--ease-out), transform var(--dur-short) var(--ease-out), visibility 0s; }
+  .js .route.is-leaving { transform: translateY(-8px); }
+  .js .route__task { display: none; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .js .route, .js .route.is-active { transition: none; transform: none; }
+  }
+</style>

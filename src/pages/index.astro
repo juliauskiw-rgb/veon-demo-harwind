@@ -1,0 +1,49 @@
+---
+import Base from "../layouts/Base.astro";
+import Header from "../components/Header.astro";
+import Hero from "../components/Hero.astro";
+import Board from "../components/Board.astro";
+import Trial from "../components/Trial.astro";
+import Novelties from "../components/Novelties.astro";
+import Support from "../components/Support.astro";
+import Makers from "../components/Makers.astro";
+import Cases from "../components/Cases.astro";
+import Charity from "../components/Charity.astro";
+import Contacts from "../components/Contacts.astro";
+import Footer from "../components/Footer.astro";
+import MobileBar from "../components/MobileBar.astro";
+import { phones, email, socials, addresses } from "../data/site";
+
+const title = "Медичне обладнання для клінік і лікарень України | Harwind";
+const description = "Постачання медичного обладнання Mindray, Fujifilm та інших виробників. Апробація 10–14 днів безкоштовно, навчання і сервіс по всій Україні. Київ.";
+
+const org = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: "Harwind",
+  logo: `${import.meta.env.BASE_URL}images/client/logo.webp`,
+  email,
+  contactPoint: [phones.sales, phones.service, phones.charity, phones.office].map((p) => ({
+    "@type": "ContactPoint", telephone: p.tel, contactType: p.label, areaServed: "UA", availableLanguage: "uk",
+  })),
+  address: [addresses.office, addresses.service].map((a) => ({
+    "@type": "PostalAddress", streetAddress: a.line, addressLocality: "Київ", addressCountry: "UA",
+  })),
+  sameAs: socials.map((s) => s.href),
+};
+---
+<Base lang="uk" title={title} description={description}>
+  <script slot="head" type="application/ld+json" set:html={JSON.stringify(org)} />
+  <Header slot="header" />
+  <Hero />
+  <Board />
+  <Trial />
+  <Novelties />
+  <Support />
+  <Makers />
+  <Cases />
+  <Charity />
+  <Contacts />
+  <Footer slot="footer" />
+  <MobileBar slot="footer" />
+</Base>

@@ -1,0 +1,90 @@
+---
+// Signature: the hospital wayfinding board of departments (concept 8.1 №2). Rows 1–8 are future catalogue pages, row 9 leads to #aprobatsiia.
+import Icon from "./Icon.astro";
+import FutureLink from "./FutureLink.astro";
+import { directions, NOTE } from "../data/site";
+---
+<section id="napryamy" class="board on-field" data-rec="R-014" aria-labelledby="board-title">
+  <div class="container">
+    <h2 id="board-title" class="h2 board__title">Оберіть своє відділення</h2>
+    <ul class="board__list">
+      {directions.map((d, i) => (
+        <li class="board__row">
+          <span class="board__pict">
+            <img src={`${import.meta.env.BASE_URL}images/client/${d.img}.webp`} width={d.w} height={d.h} alt="" loading={i < 2 ? "eager" : "lazy"} decoding="async" />
+          </span>
+          <div class="board__text">
+            <h3 class="board__name"><FutureLink note={NOTE} class="board__link">{d.name}</FutureLink></h3>
+            {(d.specialist || d.models) && (
+              <p class="board__meta">
+                {d.specialist && <span class="board__tag">Клінічний спеціаліст</span>}
+                {d.models && <span class="board__models">{d.models}</span>}
+              </p>
+            )}
+          </div>
+          <Icon name="arrow" class="board__arrow" />
+        </li>
+      ))}
+      <li class="board__row board__row--trial">
+        <span class="board__pict board__pict--type" aria-hidden="true">10–14</span>
+        <div class="board__text">
+          <h3 class="board__name"><a class="board__link" href="#aprobatsiia">Обладнання для апробації</a></h3>
+          <p class="board__meta"><span class="board__models">Тест у вашому відділенні до покупки</span></p>
+        </div>
+        <Icon name="arrow-down" class="board__arrow" />
+      </li>
+    </ul>
+  </div>
+</section>
+
+<style>
+  .board { padding-block: var(--space-7); }
+  .board__title { margin-bottom: var(--space-6); }
+  .board__list { border-top: var(--rule) solid var(--color-field); }
+  .board__row {
+    position: relative; isolation: isolate;
+    display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: var(--space-4);
+    padding: var(--space-4) var(--space-2);
+    border-bottom: var(--rule) solid var(--color-field);
+  }
+  /* Effect 2: the row steps to the lighter field on hover / focus (opacity of a layer), the arrow moves 6 px. */
+  .board__row::before { content: ""; position: absolute; inset: 0; z-index: -1; background: var(--color-field); opacity: 0; transition: opacity var(--dur-short) var(--ease-out); }
+  .board__row:focus-within::before, .board__row:active::before { opacity: 1; }
+  .board__pict { display: block; flex: none; width: 56px; height: 56px; padding: var(--space-1); background: var(--color-well); border-radius: var(--radius); }
+  .board__pict img { width: 100%; height: 100%; object-fit: contain; mix-blend-mode: multiply; }
+  .board__pict--type { display: grid; place-items: center; font-family: var(--font-display); font-weight: var(--weight-display); font-size: var(--text-base); color: var(--color-field); font-variant-numeric: tabular-nums; }
+  .board__text { display: grid; gap: var(--space-1); min-width: 0; }
+  .board__name { font-family: var(--font-display); font-weight: var(--weight-display); font-size: clamp(1.625rem, 1rem + 2.4vw, 3.5rem); line-height: 1.02; letter-spacing: -0.01em; }
+  .board__name :global(.board__link) { position: static; display: inline; color: var(--color-on-field); text-decoration: none; outline-offset: var(--space-1); }
+  .board__name :global(.board__link)::after { content: ""; position: absolute; inset: 0; }
+  .board__name :global(.future-link__note) { left: auto; right: var(--space-2); top: auto; bottom: calc(100% - var(--space-2)); }
+  .board__name :global(.board__link:focus-visible) { outline: var(--ring) solid var(--color-on-field); }
+  .board__meta { display: flex; flex-wrap: wrap; gap: var(--space-2) var(--space-4); align-items: center; font-size: var(--text-xs); color: var(--color-on-field-soft); }
+  .board__tag { padding: var(--space-0) var(--space-2); background: var(--color-well); color: var(--color-field-deep); border-radius: var(--radius); }
+  .board__row :global(.board__arrow) { width: 28px; height: 28px; color: var(--color-on-field); transition: transform var(--dur-short) var(--ease-out); }
+  .board__row:focus-within :global(.board__arrow) { transform: translateX(6px); }
+  .board__row--trial:focus-within :global(.board__arrow) { transform: translateY(6px); }
+
+  @media (hover: hover) {
+    .board__row:hover::before { opacity: 1; }
+    .board__row:hover :global(.board__arrow) { transform: translateX(6px); }
+    .board__row--trial:hover :global(.board__arrow) { transform: translateY(6px); }
+  }
+  @media (min-width: 768px) {
+    .board__row { gap: var(--space-5); padding: var(--space-3) var(--space-4); }
+    .board__pict { width: 72px; height: 72px; }
+    .board__pict--type { font-size: var(--text-md); }
+    .board__row :global(.board__arrow) { width: 36px; height: 36px; }
+  }
+  @media (min-width: 1280px) {
+    .board__text { grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: var(--space-5); }
+    .board__meta { justify-content: flex-end; text-align: right; }
+    .board { padding-block: var(--space-7); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .board__row::before { transition: none; }
+    .board__row :global(.board__arrow) { transition: none; }
+    .board__row:focus-within :global(.board__arrow), .board__row--trial:focus-within :global(.board__arrow) { transform: none; }
+    .board__row:hover :global(.board__arrow), .board__row--trial:hover :global(.board__arrow) { transform: none; }
+  }
+</style>

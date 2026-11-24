@@ -1,0 +1,32 @@
+---
+// One bottom bar on phones (concept 8.5, R-008): call sales or Telegram. Shown after the first screen.
+import Icon from "./Icon.astro";
+import { phones, telegram } from "../data/site";
+---
+<div class="mbar" data-rec="R-008,R-007,G-R002" data-mbar>
+  <a class="mbar__btn mbar__call" href={`tel:${phones.sales.tel}`}><Icon name="phone" />Подзвонити</a>
+  <a class="mbar__btn mbar__tg" href={telegram} rel="noopener"><Icon name="telegram" />Telegram</a>
+</div>
+
+<script>
+  const bar = document.querySelector<HTMLElement>("[data-mbar]");
+  const hero = document.getElementById("top");
+  if (bar && hero && "IntersectionObserver" in window) {
+    new IntersectionObserver(([e]) => bar.classList.toggle("is-shown", !e.isIntersecting), { threshold: 0 }).observe(hero);
+  } else if (bar) {
+    bar.classList.add("is-shown");
+  }
+</script>
+
+<style>
+  .mbar { position: fixed; left: 0; right: 0; bottom: 0; z-index: 40; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: var(--space-2); padding: var(--space-2) var(--space-3) calc(var(--space-2) + env(safe-area-inset-bottom)); background: var(--color-surface); border-top: var(--rule) solid var(--color-rule); transition: transform var(--dur-short) var(--ease-out); }
+  :global(.js) .mbar:not(.is-shown) { transform: translateY(110%); }
+  .mbar__btn { display: inline-flex; align-items: center; justify-content: center; gap: var(--space-2); min-height: 48px; border-radius: var(--radius); font-weight: var(--weight-semibold); text-decoration: none; white-space: nowrap; transition: background-color var(--dur-micro) var(--ease-out); }
+  .mbar__btn :global(svg) { width: 20px; height: 20px; }
+  .mbar__call { background: var(--color-accent); color: var(--color-accent-ink); }
+  .mbar__call:hover, .mbar__call:active { background: var(--color-accent-hover); }
+  .mbar__tg { border: var(--rule) solid var(--color-edge); color: var(--color-text); }
+  .mbar__tg:hover, .mbar__tg:active { background: var(--color-well); }
+  @media (min-width: 768px) { .mbar { display: none; } }
+  @media (prefers-reduced-motion: reduce) { .mbar { transition: none; } }
+</style>

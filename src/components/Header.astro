@@ -1,0 +1,112 @@
+---
+import Icon from "./Icon.astro";
+import FutureLink from "./FutureLink.astro";
+import Logo from "./Logo.astro";
+import { nav, phones, telegram, NOTE } from "../data/site";
+---
+<header class="hdr" data-rec="R-001,R-003">
+  <div class="container hdr__in">
+    <a class="hdr__logo" href="#top" aria-label="Harwind, на початок сторінки"><Logo /></a>
+
+    <nav class="hdr__nav" aria-label="Головне меню">
+      <ul>
+        {nav.map((n) => <li><a href={n.href}>{n.label}</a></li>)}
+      </ul>
+    </nav>
+
+    <div class="hdr__tools">
+      <a class="hdr__phone" href={`tel:${phones.sales.tel}`}>
+        <span class="hdr__phone-label">{phones.sales.label}</span>
+        <span class="hdr__phone-num num">{phones.sales.display}</span>
+      </a>
+      <a class="hdr__icon hdr__call" href={`tel:${phones.sales.tel}`} aria-label={`Подзвонити: ${phones.sales.label}, ${phones.sales.display}`}><Icon name="phone" /></a>
+      <a class="hdr__icon hdr__tg" href={telegram} rel="noopener" aria-label="Написати в Telegram"><Icon name="telegram" /></a>
+      <FutureLink note={NOTE} class="hdr__lang">English</FutureLink>
+
+      <details class="menu">
+        <summary class="hdr__icon menu__btn" aria-label="Меню">
+          <Icon name="menu" class="menu__open" />
+          <Icon name="close" class="menu__close" />
+        </summary>
+        <nav class="menu__panel" aria-label="Мобільне меню">
+          <ul>
+            {nav.map((n) => <li><a href={n.href}>{n.label}</a></li>)}
+          </ul>
+          <div class="menu__foot">
+            <a class="link num" href={`tel:${phones.sales.tel}`}>{phones.sales.label}: {phones.sales.display}</a>
+            <a class="link" href={telegram} rel="noopener">Telegram</a>
+            <FutureLink note={NOTE}>English</FutureLink>
+          </div>
+        </nav>
+      </details>
+    </div>
+  </div>
+</header>
+
+<script>
+  // Close the mobile menu after choosing an anchor or pressing Escape.
+  const menu = document.querySelector<HTMLDetailsElement>(".menu");
+  if (menu) {
+    menu.querySelectorAll("a").forEach((a) => a.addEventListener("click", () => { menu.open = false; }));
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && menu.open) { menu.open = false; menu.querySelector("summary")?.focus(); }
+    });
+  }
+</script>
+
+<style>
+  .hdr { position: sticky; top: 0; z-index: 50; background: var(--color-bg); border-bottom: var(--rule) solid var(--color-rule); }
+  .hdr__in { display: flex; align-items: center; gap: var(--space-5); min-height: var(--header-h); }
+  .hdr__logo { display: block; flex: none; padding-block: var(--space-2); }
+  .hdr__nav { display: none; }
+  .hdr__nav ul { display: flex; gap: var(--space-5); }
+  .hdr__nav a, .menu__panel li a { text-decoration: none; font-weight: var(--weight-semibold); white-space: nowrap; transition: color var(--dur-micro) var(--ease-out); }
+  .hdr__nav a { display: inline-flex; align-items: center; min-height: var(--tap); position: relative; }
+  .hdr__nav a::after { content: ""; position: absolute; left: 0; right: 0; bottom: var(--space-2); height: var(--ring); background: var(--color-accent); transform: scaleX(0); transform-origin: left; transition: transform var(--dur-short) var(--ease-out); }
+  .hdr__nav a:hover { color: var(--color-field); }
+  .hdr__nav a:hover::after { transform: scaleX(1); }
+  .hdr__nav a:active { color: var(--color-accent-hover); }
+  .hdr__tools { display: flex; align-items: center; gap: var(--space-2); margin-left: auto; }
+  .hdr__phone { display: none; flex-direction: column; text-decoration: none; line-height: 1.15; padding-inline: var(--space-2); min-height: var(--tap); justify-content: center; }
+  .hdr__phone-label { font-size: var(--text-xs); color: var(--color-muted); }
+  .hdr__phone-num { font-family: var(--font-display); font-weight: var(--weight-display); font-size: var(--text-md); transition: color var(--dur-micro) var(--ease-out); }
+  .hdr__phone:hover .hdr__phone-num { color: var(--color-accent); }
+  .hdr__phone:active .hdr__phone-num { color: var(--color-accent-hover); }
+  .hdr__icon { display: inline-grid; place-items: center; width: var(--tap); height: var(--tap); border: var(--rule) solid var(--color-edge); border-radius: var(--radius); color: var(--color-text); cursor: pointer; transition: border-color var(--dur-micro) var(--ease-out), background-color var(--dur-micro) var(--ease-out); }
+  .hdr__icon:hover { border-color: var(--color-text); background: var(--color-surface); }
+  .hdr__icon:active { background: var(--color-well); }
+  .hdr__icon :global(svg) { width: 22px; height: 22px; }
+  .hdr__call { background: var(--color-accent); border-color: var(--color-accent); color: var(--color-accent-ink); }
+  .hdr__call:hover { background: var(--color-accent-hover); border-color: var(--color-accent-hover); }
+  .hdr__call:active { background: var(--color-accent-hover); }
+  .hdr__tools :global(.hdr__lang) { display: none; font-size: var(--text-xs); color: var(--color-muted); padding-inline: var(--space-2); min-height: var(--tap); }
+
+  .menu { position: static; }
+  .menu__btn { list-style: none; }
+  .menu:not([open]) .menu__panel { display: none; }
+  .menu__btn::-webkit-details-marker { display: none; }
+  .menu :global(.menu__close) { display: none; }
+  .menu[open] :global(.menu__open) { display: none; }
+  .menu[open] :global(.menu__close) { display: block; }
+  .menu__panel { position: absolute; left: 0; right: 0; top: 100%; background: var(--color-bg); border-bottom: var(--rule) solid var(--color-rule); padding: var(--space-2) var(--space) var(--space-5); max-height: calc(100dvh - var(--header-h)); overflow-y: auto; }
+  .menu__panel li a { display: flex; align-items: center; min-height: var(--control-h); font-family: var(--font-display); font-weight: var(--weight-display); font-size: var(--text-lg); border-bottom: var(--rule) solid var(--color-rule); }
+  .menu__panel li a:hover { color: var(--color-field); }
+  .menu__panel li a:active { color: var(--color-accent-hover); }
+  .menu__foot { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--space-4); padding-top: var(--space-4); }
+  .menu__foot a { display: inline-flex; align-items: center; min-height: var(--tap); }
+  .menu__foot :global(.future-link) { min-height: var(--tap); color: var(--color-muted); }
+
+  @media (min-width: 768px) {
+    .hdr__phone { display: flex; }
+    .hdr__call { display: none; }
+  }
+  @media (min-width: 1180px) {
+    .hdr__nav { display: block; }
+    .hdr__tools :global(.hdr__lang) { display: inline-flex; }
+    .menu { display: none; }
+    .hdr__in { gap: var(--space-6); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .hdr__nav a::after { transition: none; }
+  }
+</style>

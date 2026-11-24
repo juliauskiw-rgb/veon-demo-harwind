@@ -1,0 +1,59 @@
+---
+// #novynky (concept 8.1 №4): 4 models from W-F006, client photos, ≤ 2 tags, one action each.
+import FutureLink from "./FutureLink.astro";
+import { models, phones, NOTE } from "../data/site";
+---
+<section id="novynky" class="news section" data-rec="R-004,R-005" aria-labelledby="news-title">
+  <div class="container">
+    <div class="section__head news__head">
+      <h2 id="news-title" class="h2">Новинки Mindray у каталозі</h2>
+      <p class="lede muted">На новинки діють апробація, кредитування 5-7-9 і навчання роботі з обладнанням.</p>
+    </div>
+    <ul class="news__grid">
+      {models.map((m) => (
+        <li class="card">
+          <div class="card__pic">
+            <img src={`${import.meta.env.BASE_URL}images/client/${m.img}.webp`} width={m.w} height={m.h} alt={m.alt} loading="eager" decoding="async" />
+          </div>
+          <div class="card__body">
+            <p class="card__kind small muted">{m.kind}</p>
+            <h3 class="card__name"><FutureLink note={NOTE} class="card__link">{m.name}</FutureLink></h3>
+            <p class="card__tags small"><span class="card__tag">В наявності</span></p>
+            <a class="btn btn--secondary card__cta" href={`tel:${phones.sales.tel}`}>Запитати ціну й умови</a>
+          </div>
+        </li>
+      ))}
+    </ul>
+    <p class="news__all"><FutureLink note={NOTE} class="news__all-link">Увесь каталог</FutureLink></p>
+  </div>
+</section>
+
+<style>
+  .news.section { padding-top: var(--space-7); padding-bottom: var(--space-8); }
+  .news__head { max-width: 62rem; }
+  .news__grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--space-5); }
+  .card { display: grid; grid-template-columns: minmax(0, 1fr); grid-template-rows: auto 1fr; background: var(--color-surface); border: var(--rule) solid var(--color-rule); border-radius: var(--radius); }
+  .card__pic { position: relative; aspect-ratio: 4 / 3; overflow: hidden; background: var(--color-well); }
+  .card__pic img { position: absolute; inset: var(--space-5); width: calc(100% - 2 * var(--space-5)); height: calc(100% - 2 * var(--space-5)); object-fit: contain; mix-blend-mode: multiply; }
+  .card__body { display: grid; gap: var(--space-3); align-content: start; padding: var(--space-5); }
+  .card__name { font-family: var(--font-display); font-weight: var(--weight-display); font-size: var(--text-title); line-height: 1.02; letter-spacing: -0.01em; }
+  .card__name :global(.card__link) { text-decoration: none; }
+  .card__name :global(.card__link:hover) { color: var(--color-field); }
+  .card__tags { display: flex; flex-wrap: wrap; gap: var(--space-2); }
+  .card__tag { padding: var(--space-0) var(--space-2); background: var(--color-well); color: var(--color-text); border-radius: var(--radius); }
+  .card__cta { justify-self: start; margin-top: var(--space-2); }
+  .news__all { margin-top: var(--space-6); font-weight: var(--weight-semibold); }
+  .news__all :global(.news__all-link) { min-height: var(--tap); }
+
+  @media (max-width: 767px) {
+    .card__cta { justify-self: stretch; }
+  }
+  @media (min-width: 768px) {
+    .news__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+  @media (min-width: 1024px) {
+    .card { grid-template-rows: none; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+    .card__pic { aspect-ratio: auto; min-height: 300px; }
+    .card__name { min-height: 2.08em; }
+  }
+</style>

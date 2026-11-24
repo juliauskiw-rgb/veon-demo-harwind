@@ -1,0 +1,39 @@
+---
+// #blagodiinykam (concept 8.1 №8): narrow teal band, own number for charities (W-F014).
+import FutureLink from "./FutureLink.astro";
+import Icon from "./Icon.astro";
+import { phones, email, NOTE } from "../data/site";
+---
+<section id="blagodiinykam" class="charity on-field" aria-labelledby="charity-title">
+  <div class="container charity__grid">
+    <div class="charity__text">
+      <h2 id="charity-title" class="h2">Благодійникам</h2>
+      <p>Фондам і донорам, які закуповують обладнання для лікарень, відповідає окремий номер. Підберемо рішення під потреби закладу.</p>
+    </div>
+    <div class="charity__contact">
+      <a class="charity__phone num" href={`tel:${phones.charity.tel}`}>{phones.charity.display}</a>
+      <div class="charity__actions">
+        <a class="btn btn--on-field" href={`mailto:${email}?subject=${encodeURIComponent("Благодійна закупівля")}`}><Icon name="mail" />Написати листа</a>
+        <FutureLink note={NOTE} class="charity__more">Докладніше для фондів</FutureLink>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .charity { background: var(--color-field); padding-block: var(--space-7); }
+  .charity__grid { display: grid; gap: var(--space-5); align-items: center; }
+  .charity__text { display: grid; gap: var(--space-3); }
+  .charity__text p { max-width: 48ch; }
+  .charity__contact { display: grid; gap: var(--space-4); justify-items: start; }
+  .charity__phone { font-family: var(--font-display); font-weight: var(--weight-display); font-size: clamp(2.5rem, 1.6rem + 3.6vw, 4.5rem); line-height: 0.95; color: var(--color-on-field); text-decoration: none; transition: opacity var(--dur-micro) var(--ease-out); }
+  .charity__phone:hover { text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 0.12em; }
+  .charity__phone:active { opacity: 0.8; }
+  .charity__actions { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-3) var(--space-5); }
+  .charity__actions :global(.charity__more) { min-height: var(--tap); font-weight: var(--weight-semibold); }
+  @media (min-width: 1024px) {
+    .charity__grid { grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gutter); }
+    .charity__text { grid-column: 1 / span 6; }
+    .charity__contact { grid-column: 8 / span 5; }
+  }
+</style>

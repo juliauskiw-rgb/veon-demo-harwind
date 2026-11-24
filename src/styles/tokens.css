@@ -1,0 +1,87 @@
+/* Hallmark · shape: wayfinding board · genre: modern-minimal · theme: custom · job: hire · idea: "головна як покажчик лікарні: кожен знаходить своє відділення, а Harwind веде обладнання до нього від апробації до сервісу" · vibe: "покажчик, поле teal, стиснений гротеск, чіткі кути"
+ * paper: #F2F6F7 · accent: #D2104B · display: Sofia Sans Condensed · body: Golos Text · hero: типографський top-heavy, H1 + 2 CTA ліворуч, teal-дошка напрямів перетинає fold · nav: логотип, 6 якорів, телефон відділу продажу з підписом, Telegram · footer: світлий, teal-лінія, напрями, компанія, контакти за відділами, соцмережі · imagery: client photos · signature: дошка-покажчик відділень і смуга 14 днів апробації
+ * axes: light/grotesk-condensed/chromatic-crimson · posture: committed · surface: absolute · field: #08313C/#0B5568 · contrast: pass · fold: pass · v2.0.0 */
+/* Hallmark · pre-emit critique: P4 H5 E4 S4 R4 V4 · weakest: P, a supplier homepage argues little; led with the trial-before-purchase promise in the H1 and made the board the navigation itself */
+/* Hallmark · waive 42 · nav and footer named in this stamp · a hospital supplier needs the sales phone in the bar and contacts per department in the footer */
+/* Hallmark · waive 7b · #FFFFFF is the approved surface and on-field ink in concept 8.2, contrast 8.35 and 13.86 on teal · white text on the teal board and white model cards are part of the Harwind wayfinding sign */
+/* Hallmark · answered F4 · the white button lives only on the teal charity band, where the crimson primary is banned by the concept (1.56:1 on teal) */
+/* Hallmark · waive 44c · the hero ends near 643px at 1440 so the teal board of departments enters the fold · concept 8.1 asks for the wayfinding board title and first row inside the first screen */
+/* Hallmark · dismissed 59 · the nine sections and their ids are fixed by the approved concept 8.1, each one answers a visitor scenario C1 to C5 */
+/* Client design tokens: from design/concept.md (veon-concept: colors, fonts; 8.2–8.4, 8.7). */
+:root {
+  /* Палітра 8.2 */
+  --color-bg: #F2F6F7;
+  --color-surface: #FFFFFF;
+  --color-well: #DCE8EB;
+  --color-text: #0E2329;
+  --color-muted: #4A5F66;
+  --color-field: #0B5568;
+  --color-field-deep: #08313C;
+  --color-on-field-soft: #9FC4CD;
+  --color-accent: #D2104B;
+  --color-accent-hover: #A80C3B;
+  --color-accent-ink: #FFFFFF;
+  --color-rule: #B7C8CD;
+  --color-edge: #6F868D;
+  --color-on-field: #FFFFFF;
+
+  /* Шрифти 8.3 (Fontsource, локально) */
+  --font-display: "Sofia Sans Condensed Variable", "Sofia Sans Condensed", "Arial Narrow", system-ui, sans-serif;
+  --font-body: "Golos Text Variable", "Golos Text", system-ui, sans-serif;
+  --weight-regular: 400;
+  --weight-semibold: 600;
+  --weight-display: 800;
+
+  /* Шкала ≈1.25: 14 · 17 · 21 · 28 · 40 · 56 + display */
+  --text-xs: 0.875rem;
+  --text-base: 1.0625rem;
+  --text-md: 1.3125rem;
+  --text-lg: 1.75rem;
+  --text-xl: 2.5rem;
+  --text-2xl: 3.5rem;
+  --text-display: clamp(2.75rem, 6.2vw, 5.75rem);
+  --text-section: clamp(2rem, 1.2rem + 2.6vw, 3.5rem);
+  --text-title: clamp(1.625rem, 1.2rem + 1.4vw, 2.5rem);
+  --leading-display: 0.98;
+  --leading-body: 1.55;
+
+  /* Відступи 4/8 */
+  --space-0: 0;
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 40px;
+  --space-7: 64px;
+  --space-8: 96px;
+  --space-9: 144px;
+  --space-section: clamp(64px, 4rem + 4vw, 144px);
+
+  /* Сітка 8.4 */
+  --space: clamp(20px, 5vw, 80px);
+  --container: 1240px;
+  --gutter: 24px;
+  --header-h: 72px;
+  --bar-h: 64px;
+  --control-h: 52px;
+  --tap: 44px;
+
+  /* Форма */
+  --radius: 2px;
+  --rule: 1px;
+  --rule-strong: 4px;
+  --ring: 2px;
+
+  /* Рух 8.7 */
+  --ease-out: cubic-bezier(0.2, 0.7, 0.2, 1);
+  --dur-micro: 120ms;
+  --dur-short: 220ms;
+  --dur: 420ms;
+  --dur-land: 500ms;
+  --delay-tip: 800ms;
+}
+
+@media (max-width: 767px) {
+  :root { --header-h: 56px; }
+}
